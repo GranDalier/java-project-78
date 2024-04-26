@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 
 import hexlet.code.schemas.StringSchema;
 
@@ -49,6 +50,7 @@ public final class ValidatorTest {
         final int testLen1 = 5;
         StringSchema schema2 = v.string().required().minLength(testLen1).contains("hex");
         assertThat(schema2.isValid("hexlet")).isTrue();
+        assertThat(schema2.isValid("hexl")).isFalse();
 
         // Testing if same rule chain uses the most recent one in the chain
         StringSchema schema1 = v.string();
@@ -56,5 +58,19 @@ public final class ValidatorTest {
         final int testLen3 = 4;
         boolean actualRewrites = schema1.minLength(testLen2).minLength(testLen3).isValid("Hexlet");
         assertThat(actualRewrites).isTrue();
+
+        // Testing IllegalArgumentException
+        StringSchema exceptionSchema = v.string();
+        final int testLenEx1 = -1;
+        Throwable thrown1 = catchThrowable(() -> exceptionSchema.minLength(testLenEx1));
+        assertThat(thrown1).hasMessageContaining(
+                "Minimum length must be positive number (was '%s')".formatted(testLenEx1)
+        );
+
+        final int testLenEx2 = -10;
+        Throwable thrown2 = catchThrowable(() -> exceptionSchema.required().minLength(testLenEx2));
+        assertThat(thrown2).hasMessageContaining(
+                "When string is required, minimum length must be greater than 0 (was '%s')".formatted(testLenEx2)
+        );
     }
 }
