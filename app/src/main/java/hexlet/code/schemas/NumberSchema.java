@@ -1,40 +1,23 @@
 package hexlet.code.schemas;
 
-public final class NumberSchema implements BaseSchema<Integer> {
-    private int lowerBound;
-    private int upperBound;
-    private boolean isRequired;
-    private boolean isPositive;
+public final class NumberSchema extends BaseSchema<Integer> {
 
     public NumberSchema() {
-        lowerBound = Integer.MIN_VALUE;
-        upperBound = Integer.MAX_VALUE;
-        isRequired = false;
-        isPositive = false;
-    }
-
-    @Override
-    public boolean isValid(Integer item) {
-        if (isRequired && item == null) {
-            return false;
-        }
-        return item == null || item >= lowerBound && item <= upperBound;
-    }
-
-    public NumberSchema range(int begin, int end) {
-        lowerBound = (isPositive && begin < 1) ? 1 : begin;
-        upperBound = end;
-        return this;
+        super();
     }
 
     public NumberSchema required() {
-        isRequired = true;
+        setNotNullable();
+        return this;
+    }
+
+    public NumberSchema range(int begin, int end) {
+        addRule("range", num -> num >= begin && num <= end);
         return this;
     }
 
     public NumberSchema positive() {
-        isPositive = true;
-        lowerBound = 1;
+        addRule("positive", num -> num > 0);
         return this;
     }
 
