@@ -2,7 +2,7 @@ package hexlet.code.schemas;
 
 import java.util.Optional;
 
-public final class StringSchema {
+public final class StringSchema implements BaseSchema<String> {
     private String expectedContains;
     private int minLength;
     private boolean isRequired;
@@ -39,16 +39,12 @@ public final class StringSchema {
 
     public StringSchema minLength(int length) {
         if (isRequired && length <= 0) {
-            throw new IllegalArgumentException(
-                    "When string is required, minimum length must be greater than 0 (was '%s')"
-                            .formatted(length)
-            );
+            minLength = 1;
+            return this;
         }
         if (length < 0) {
-            throw new IllegalArgumentException(
-                    "Minimum length must be positive number (was '%s')"
-                            .formatted(length)
-            );
+            minLength = 0;
+            return this;
         }
         minLength = length;
         return this;
