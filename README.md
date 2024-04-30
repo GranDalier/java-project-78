@@ -51,3 +51,8 @@ human2.put("name", "");
 human2.put("age", null);
 schema.isValid(human2); // false
 ```
+## Сборка
+Из директории app выполнить команду:
+```
+make build
+```
