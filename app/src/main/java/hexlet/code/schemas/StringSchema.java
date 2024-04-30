@@ -2,10 +2,6 @@ package hexlet.code.schemas;
 
 public final class StringSchema extends BaseSchema<String> {
 
-    public StringSchema() {
-        super();
-    }
-
     public StringSchema required() {
         setNotNullable();
         addRule("required", str -> !str.isEmpty());

@@ -4,10 +4,6 @@ import java.util.Map;
 
 public final class MapSchema extends BaseSchema<Map<?, ?>> {
 
-    public MapSchema() {
-        super();
-    }
-
     public MapSchema required() {
         setNotNullable();
         return this;

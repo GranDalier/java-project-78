@@ -8,24 +8,15 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class BaseSchema<T> {
-    private final Map<String, Predicate<T>> schema;
-    private boolean isNullable;
-
-    protected BaseSchema() {
-        schema = new HashMap<>();
-        isNullable = true;
-    }
+    private final Map<String, Predicate<T>> schema = new HashMap<>();
+    private boolean isNullable = true;
 
     public final boolean isValid(T value) {
         if (isNull(value)) {
             return isNullable;
         }
-        for (Predicate<T> rule : schema.values()) {
-            if (!rule.test(value)) {
-                return false;
-            }
-        }
-        return true;
+        return schema.values().stream().
+                allMatch(rule -> rule.test(value));
     }
 
     protected final void addRule(String label, Predicate<T> rule) {
